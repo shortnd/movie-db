@@ -1,22 +1,26 @@
-import React, { Component } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
+import { Link } from 'react-router-dom';
+import styled from 'styled-components';
 
+const POSTER_PATH = 'http://image.tmdb.org/t/p/w154';
 
-export default class Movie extends Component {
-  static propTypes = {
-    movie: PropTypes.shape({
-      title: PropTypes.string.isRequired,
-    }),
-    desc: PropTypes.string,
-  }
+const Movie = ({ movie }) => (
+  <Link to={`/${movie.id}`}>
+    <Poster src={`${POSTER_PATH}${movie.poster_path}`} alt={movie.title} />
+  </Link>
+);
 
-  render() {
-    const { movie, desc } = this.props;
-    return (
-      <div>
-        <h3>{movie.title}</h3>
-        <p>{desc}</p>
-      </div>
-    );
-  }
-}
+export default Movie;
+
+Movie.propTypes = {
+  movie: PropTypes.shape({
+    title: PropTypes.string.isRequired,
+    poster_path: PropTypes.string,
+    id: PropTypes.number.isRequired,
+  }).isRequired,
+};
+
+export const Poster = styled.img`
+  box-shadow: 0 0 35px black;
+`;

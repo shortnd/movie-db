@@ -25,6 +25,8 @@ module.exports = {
     "react/jsx-filename-extension": 0,
     "function-paren-newline": 0,
     "react/state-in-constructor": 0,
-    "react/prefer-stateless-function": 0
+    "react/prefer-stateless-function": 0,
+    "template-curly-spacing": 0,
+    "indent": 0
   }
 };
