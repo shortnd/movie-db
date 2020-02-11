@@ -1,34 +1,31 @@
-import React, { Component } from 'react';
+import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import Movie from './Movie';
 
-class MoviesList extends Component {
-  state = {
-    movies: [],
-  }
 
-  async componentDidMount() {
-    try {
-      const res = await fetch('https://api.themoviedb.org/3/discover/movie?api_key=a941b96952ba6330c47874e72e8bc4b0&language=en-US&sort_by=popularity.desc&include_adult=false&include_video=false&page=1');
-      const movies = await res.json();
-      this.setState({
-        movies: movies.results,
-      });
-    } catch (e) {
-      // eslint-disable-next-line no-console
-      console.log(e);
+const MoviesList = () => {
+  const [movies, setMovies] = useState([]);
+
+  useEffect(() => {
+    async function getMovies() {
+      try {
+        const res = await fetch('https://api.themoviedb.org/3/discover/movie?api_key=a941b96952ba6330c47874e72e8bc4b0&language=en-US&sort_by=popularity.desc&include_adult=false&include_video=false&page=1');
+        const { results } = await res.json();
+        setMovies(results);
+      } catch (e) {
+        console.log(e);
+      }
     }
-  }
+    getMovies();
+  });
 
-  render() {
-    const { movies } = this.state;
-    return (
-      <MovieGrid>
-        {movies.map((movie) => <Movie movie={movie} key={movie.id} />)}
-      </MovieGrid>
-    );
-  }
-}
+  return (
+    <MovieGrid>
+      {movies.map((movie) => <Movie movie={movie} key={movie.id} />)}
+    </MovieGrid>
+  );
+};
+
 
 export default MoviesList;
 
