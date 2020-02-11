@@ -27,7 +27,7 @@ const MovieDetail = () => {
   return (
     <MovieWrapper backdrop={`${BACKDROP_PATH}${movie.backdrop_path}`}>
       <MovieInfo>
-        <Overdrive id={String(movie.id)}>
+        <Overdrive id={`${movie.id}`}>
           <Poster src={`${POSTER_PATH}${movie.poster_path}`} alt={movie.title} />
         </Overdrive>
         <div>
