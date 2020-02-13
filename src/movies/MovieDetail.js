@@ -1,29 +1,28 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { useParams } from 'react-router';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
 import styled from 'styled-components';
 import Overdrive from 'react-overdrive';
 import { Poster } from './Movie';
+import { getMovie, resetMovie } from './actions';
 
 const POSTER_PATH = 'http://image.tmdb.org/t/p/w154/';
 const BACKDROP_PATH = 'http://image.tmdb.org/t/p/w1280/';
 
-const MovieDetail = () => {
+const MovieDetail = ({
+ movie, isLoaded, getMovie, resetMovie,
+}) => {
   const { id } = useParams();
-  const [movie, setMovie] = useState({});
 
   useEffect(() => {
-    async function getMovie() {
-      try {
-        const res = await fetch(`https://api.themoviedb.org/3/movie/${id}?api_key=a941b96952ba6330c47874e72e8bc4b0&language=en-US`);
-        const resMovie = await res.json();
-        setMovie(resMovie);
-      } catch (e) {
-        console.log(e);
-      }
-    }
-    getMovie();
-  }, [id]);
+    getMovie(id);
+    return () => {
+      resetMovie();
+    };
+  }, [id, resetMovie]);
 
+  if (!movie.id) return null;
   return (
     <MovieWrapper backdrop={`${BACKDROP_PATH}${movie.backdrop_path}`}>
       <MovieInfo>
@@ -40,7 +39,17 @@ const MovieDetail = () => {
   );
 };
 
-export default MovieDetail;
+const mapStateToProps = (state) => ({
+  movie: state.movies.movie,
+  isLoaded: state.movies.movieLoaded,
+});
+
+const mapDispatchToProps = (dispatch) => bindActionCreators({
+  getMovie,
+  resetMovie,
+}, dispatch);
+
+export default connect(mapStateToProps, mapDispatchToProps)(MovieDetail);
 
 const MovieWrapper = styled.div`
   position: relative;
