@@ -6,9 +6,12 @@ import { getMovies } from './actions';
 import Movie from './Movie';
 
 
-const MoviesList = ({ movies, isLoaded, getMovies }) => {
+const MoviesList = ({
+ movies, isLoaded, getMovies, moviesLoadedAt,
+}) => {
   useEffect(() => {
-    if (!isLoaded) {
+    const oneHour = 60 * 60 * 1000;
+    if (!isLoaded || ((new Date() - new Date(moviesLoadedAt)) > oneHour)) {
       getMovies();
     }
   }, [getMovies]);
@@ -25,6 +28,7 @@ const MoviesList = ({ movies, isLoaded, getMovies }) => {
 const mapStateToProps = (state) => ({
   movies: state.movies.movies,
   isLoaded: state.movies.moviesLoaded,
+  moviesLoadedAt: state.movies.moviesLoadedAt,
 });
 
 const mapDispatchToProps = (dispatch) => bindActionCreators({

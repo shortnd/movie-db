@@ -10,6 +10,7 @@ import { applyMiddleware, createStore } from 'redux';
 import { composeWithDevTools } from 'redux-devtools-extension';
 import logger from 'redux-logger';
 import thunk from 'redux-thunk';
+import { load, save } from 'redux-localstorage-simple';
 
 import logo from './logo.svg';
 import './App.css';
@@ -27,9 +28,9 @@ const middleware = [
 
 const store = createStore(
   rootReducer,
-  {},
+  load(),
   // third is middleware,
-  composeWithDevTools(applyMiddleware(...middleware)),
+  composeWithDevTools(applyMiddleware(...middleware, save())),
 );
 
 
